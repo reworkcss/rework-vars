@@ -1,7 +1,9 @@
 
 # rework-vars
 
-  Add CSS spec style variable support. Note that this does not cascade like the CSS variable
+  Add CSS spec style variable support (the ones that used to be in core).
+
+  Note that this does not cascade like the CSS variable
   spec does, thus this is _not_ some sort of fallback mechanism, just a useful
   feature. Optionally you may pass an `object` of variables from js-land.
 
