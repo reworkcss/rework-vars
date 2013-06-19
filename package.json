@@ -1,0 +1,15 @@
+{
+  "name": "rework-vars",
+  "version": "1.0.0",
+  "description": "CSS spec style variables for Rework",
+  "keywords": [
+    "css",
+    "rework",
+    "variables",
+    "vars"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "rework-visit": "1.0.0"
+  }
+}
