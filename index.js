@@ -38,7 +38,7 @@ module.exports = function(map) {
 
   return function vars(style){
     // map vars
-    visit.declarations(style, function(declarations, node){
+    visit(style, function(declarations, node){
       declarations.forEach(function(decl){
         if (0 != decl.property.indexOf('var-')) return;
         var name = decl.property.replace('var-', '');
@@ -46,8 +46,8 @@ module.exports = function(map) {
       });
     });
 
-      // substitute values
-    visit.declarations(style, function(declarations, node){
+    // substitute values
+    visit(style, function(declarations, node){
       declarations.forEach(function(decl){
         if (!decl.value.match(/\bvar\(/)) return;
         decl.value = replace(decl.value);
