@@ -40,7 +40,7 @@ module.exports = function(map) {
     // map vars
     visit(style, function(declarations, node){
       declarations.forEach(function(decl){
-        if (0 != decl.property.indexOf('var-')) return;
+        if (!decl.property || 0 != decl.property.indexOf('var-')) return;
         var name = decl.property.replace('var-', '');
         map[name] = decl.value;
       });
@@ -49,7 +49,7 @@ module.exports = function(map) {
     // substitute values
     visit(style, function(declarations, node){
       declarations.forEach(function(decl){
-        if (!decl.value.match(/\bvar\(/)) return;
+        if (!decl.value || !decl.value.match(/\bvar\(/)) return;
         decl.value = replace(decl.value);
       });
     });
