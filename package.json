@@ -11,5 +11,9 @@
   "license": "MIT",
   "dependencies": {
     "rework-visit": "1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/visionmedia/rework-vars.git"
   }
 }
