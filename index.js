@@ -18,6 +18,10 @@ var visit = require('rework-visit');
  *
  * yields:
  *
+ *   :root {
+ *     var-header-color: #06c;
+ *   }
+ *
  *   h1 {
  *     background-color: #06c;
  *   }
