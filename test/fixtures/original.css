@@ -1,0 +1,17 @@
+/**
+ * External comment
+ */
+
+:root {
+  /* comment inside ruleset */
+  var-border: 5px solid red;
+  var-color: #fff;
+  var-start-color: #111;
+  var-end-color: #222;
+}
+
+.test {
+  background: linear-gradient(to top, var(start-color), var(end-color));
+  border: var(border);
+  color: var(color);
+}
