@@ -1,5 +1,5 @@
 
-# rework-vars
+# rework [![Build Status](https://travis-ci.org/visionmedia/rework-vars.png)](https://travis-ci.org/visionmedia/rework-vars)
 
   Add CSS spec style variable support (the ones that used to be in core).
 
