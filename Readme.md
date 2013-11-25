@@ -1,11 +1,20 @@
 
-# rework [![Build Status](https://travis-ci.org/visionmedia/rework-vars.png)](https://travis-ci.org/visionmedia/rework-vars)
+# rework-vars [![Build Status](https://travis-ci.org/visionmedia/rework-vars.png)](https://travis-ci.org/visionmedia/rework-vars)
 
-  Add CSS spec style variable support (the ones that used to be in core).
+Add support for [CSS spec style variables](http://www.w3.org/TR/css-variables/).
 
-  Note that this does not cascade like the CSS variable
-  spec does, thus this is _not_ some sort of fallback mechanism, just a useful
-  feature. Optionally you may pass an `object` of variables from js-land.
+Note that variables are not scoped or dynamic. Every variable is in the global
+scope. Variables are replaced once, and then they function as normal CSS
+values. Therefore, this is _not_ some sort of fallback mechanism, just a useful
+feature.
+
+Optionally you may pass an object of variables - `map` - from js-land.
+
+```js
+vars(map);
+```
+
+## Example
 
 ```css
 :root {
@@ -26,14 +35,9 @@ h1 {
 }
 ```
 
-  yields:
+yields:
 
 ```css
-:root {
-  var-header-color: #06c;
-  var-main-color: #c06
-}
-
 div {
   var-accent-background: linear-gradient(to top, #c06, white)
 }
@@ -47,6 +51,6 @@ h1 {
 }
 ```
 
-# License
+## License
 
-  MIT
+MIT
