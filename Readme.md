@@ -1,19 +1,47 @@
 # rework-vars [![Build Status](https://travis-ci.org/visionmedia/rework-vars.png)](https://travis-ci.org/visionmedia/rework-vars)
 
-Add support for [CSS spec style variables](http://www.w3.org/TR/css-variables/).
+A [Rework](https://github.com/visionmedia/rework) plugin to add support for the
+[W3C-style CSS variables](http://www.w3.org/TR/css-variables/) syntax.
 
-Note that variables are not scoped or dynamic. Every variable is in the global
-scope. Variables are replaced once, and then they function as normal CSS
-values. Therefore, this is _not_ some sort of polyfill, just a useful
-feature.
+**N.B.** This is _not_ a polyfill. Variables are not scoped or dynamic. Every
+variable is in the global scope. Variables are replaced once, and then function
+as normal CSS values.
 
-Optionally you may pass an object of variables - `map` - from js-land.
+## Installation
 
-```js
-vars(map);
+```
+npm install rework-vars
 ```
 
-## Example
+## Use
+
+As a Rework plugin:
+
+```js
+// dependencies
+var fs = require('fs');
+var rework = require('rework');
+var vars = require('rework-vars');
+
+// css to be processed
+var css = fs.readFileSync('build/build.css', 'utf8').toString();
+
+// process css using rework-vars
+var out = rework(css).use(vars()).toString();
+```
+
+Optionally, you may pass an object of variables - `map` - to the JavaScript
+function.
+
+```js
+var map = {
+  'app-bg-color': 'white'
+}
+
+var out = rework(css).use(vars(map)).toString();
+```
+
+## Example output
 
 ```css
 :root {
