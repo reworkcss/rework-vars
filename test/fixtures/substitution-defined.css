@@ -1,0 +1,15 @@
+:root {
+  var-test-one: green;
+  var-test-two: blue;
+}
+
+div {
+  /* single variable */
+  color: var(test-one);
+  /* single variable with tail */
+  color: var(test-one) !important;
+  /* multiple variables */
+  color: var(test-one), var(test-two);
+  /* multiple variables within a function */
+  background: linear-gradient(to top, var(test-one), var(test-two));
+}

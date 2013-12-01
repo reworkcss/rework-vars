@@ -1,0 +1,10 @@
+div {
+  /* single variable */
+  color: green;
+  /* single variable with tail */
+  color: green !important;
+  /* multiple variables */
+  color: green, blue;
+  /* multiple variables within a function */
+  background: linear-gradient(to top, green, blue);
+}

@@ -1,0 +1,6 @@
+div {
+  var-test: green;
+  color: var(test);
+  var-test: red;
+  color: var(test);
+}

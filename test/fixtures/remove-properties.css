@@ -1,0 +1,10 @@
+:root {
+  var-test-one: test;
+  var-test-two: test;
+}
+
+:root {
+  /* inner comment */
+  var-test-three: test;
+  var-test-four: test;
+}
