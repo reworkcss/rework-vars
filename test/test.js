@@ -24,7 +24,7 @@ describe('rework-vars', function(){
     var output = function () {
       return rework(fixture('substitution-empty')).use(vars).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: empty var() is not allowed in CSS');
+    expect(output).to.Throw(Error, 'rework-vars: var() must contain a non-whitespace string');
   });
 
   it('throws an error when a variable function references an undefined variable', function(){
@@ -32,6 +32,13 @@ describe('rework-vars', function(){
       return rework(fixture('substitution-undefined')).use(vars).toString();
     };
     expect(output).to.Throw(Error, 'rework-vars: variable "test" is undefined');
+  });
+
+  it('throws an error when a variable function is malformed', function(){
+    var output = function () {
+      return rework(fixture('substitution-malformed')).use(vars).toString();
+    };
+    expect(output).to.Throw(Error, 'rework-vars: missing closing ")" in the value "var(test, rgba(0,0,0,0.5)"');
   });
 
   it('substitutes defined variables', function(){

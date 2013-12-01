@@ -82,9 +82,11 @@ function replaceValue(value, map){
     endSlice += 1;
   }
 
+  if (depth > 0) throw new Error('rework-vars: missing closing ")" in the value "' + value + '"');
+
   cssVariable = value.slice(beginSlice, endSlice);
 
-  if (RE_EMPTY_VAR.test(cssVariable)) throw new Error('rework-vars: empty var() is not allowed in CSS');
+  if (RE_EMPTY_VAR.test(cssVariable)) throw new Error('rework-vars: var() must contain a non-whitespace string');
 
   cssReplacement = cssVariable.replace(RE_VAR, function(_, name, fallback){
     var replacement = map[name];
