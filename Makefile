@@ -1,7 +1,9 @@
-test: install
-	@ ./node_modules/.bin/mocha --slow 30 --reporter spec
+all: install test
 
 install:
 	@ npm install
 
-.PHONY: test install
+test:
+	@ ./node_modules/.bin/mocha --slow 30 --reporter spec
+
+.PHONY: all install test

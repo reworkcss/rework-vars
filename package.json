@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "should": "~2.1.0",
-    "rework": "~0.18.3"
+    "rework": "~0.18.3",
+    "chai": "~1.8.1"
   },
   "repository": {
     "type": "git",
