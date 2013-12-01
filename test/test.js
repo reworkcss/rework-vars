@@ -20,6 +20,13 @@ describe('rework-vars', function(){
     compareFixtures('remove-properties');
   });
 
+  it('throws an error when a variable function is empty', function(){
+    var output = function () {
+      return rework(fixture('substitution-empty')).use(vars).toString();
+    };
+    expect(output).to.Throw(Error, 'rework-vars: empty var() is not allowed in CSS');
+  });
+
   it('throws an error when a variable function references an undefined variable', function(){
     var output = function () {
       return rework(fixture('substitution-undefined')).use(vars).toString();
@@ -33,6 +40,10 @@ describe('rework-vars', function(){
 
   it('overwrites variables in place', function(){
     compareFixtures('substitution-overwrite');
+  });
+
+  it('substitutes undefined variables if there is a fallback', function(){
+    compareFixtures('substitution-fallback');
   });
 
   it('supports case-sensitive variables', function(){
