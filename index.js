@@ -6,22 +6,7 @@
 var visit = require('rework-visit');
 
 /**
- * Add variable support.
- *
- *   :root {
- *     var-header-color: #06c;
- *   }
- *
- *   h1 {
- *     background-color: var(header-color);
- *   }
- *
- * yields:
- *
- *   h1 {
- *     background-color: #06c;
- *   }
- *
+ * Module export.
  */
 
 module.exports = function(map) {
@@ -30,7 +15,7 @@ module.exports = function(map) {
   function replace(str) {
     return str.replace(/\bvar\((.*?)\)/g, function(_, name){
       var val = map[name];
-      if (!val) throw new Error('variable "' + name + '" is undefined');
+      if (!val) throw new Error('rework-vars: variable "' + name + '" is undefined');
       if (val.match(/\bvar\(/)) val = replace(val);
       return val;
     });
@@ -42,11 +27,16 @@ module.exports = function(map) {
       var varPropIndexes = [];
 
       declarations.forEach(function(decl, i){
-        if (!decl.property || 0 != decl.property.indexOf('var-')) return;
-        var name = decl.property.replace('var-', '');
-        map[name] = decl.value;
-        // store the index of each `var-*` property
-        varPropIndexes.push(i);
+        if (decl.property && /\bvar\-/.test(decl.property)) {
+          var name = decl.property.replace('var-', '');
+          map[name] = decl.value;
+          // store the index of each `var-*` property
+          varPropIndexes.push(i);
+        }
+
+        if (decl.value && /\bvar\(/.test(decl.value)) {
+          decl.value = replace(decl.value);
+        }
       });
 
       // make sure indices are always sorted in ascending order
@@ -58,13 +48,5 @@ module.exports = function(map) {
         declarations.splice(varPropIndexes[i], 1);
       }
     });
-
-    // substitute values
-    visit(style, function(declarations, node){
-      declarations.forEach(function(decl){
-        if (!decl.value || !decl.value.match(/\bvar\(/)) return;
-        decl.value = replace(decl.value);
-      });
-    });
-  }
+  };
 };
