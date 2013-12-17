@@ -3,8 +3,11 @@
   var-test-two: test;
 }
 
+div {
+  color: red;
+}
+
 :root {
-  /* inner comment */
   var-test-three: test;
   var-test-four: test;
 }

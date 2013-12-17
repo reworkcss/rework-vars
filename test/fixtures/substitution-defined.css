@@ -3,7 +3,13 @@
   var-test-two: blue;
 }
 
+:root,
+span {
+  var-untouched: red;
+}
+
 div {
+  var-untouched: red;
   /* single variable */
   color: var(test-one);
   /* single variable with tail */

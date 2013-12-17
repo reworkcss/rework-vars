@@ -3,9 +3,8 @@
 A [Rework](https://github.com/visionmedia/rework) plugin to add support for the
 [W3C-style CSS variables](http://www.w3.org/TR/css-variables/) syntax.
 
-**N.B.** This is _not_ a polyfill. Variables are not scoped or dynamic. Every
-variable is in the global scope. Variables are replaced once, and then function
-as normal CSS values.
+**N.B.** This is _not_ a polyfill. This plugin aims to provide a future-proof
+way of using a _limited subset_ of the features provided by native CSS variables.
 
 ## Installation
 
@@ -41,59 +40,143 @@ var map = {
 var out = rework(css).use(vars(map)).toString();
 ```
 
-## Example output
+## Supported features
+
+Variables can be declared as custom CSS properties on the `:root` element,
+prefixed with `var-`:
 
 ```css
 :root {
-  var-header-bg-color: green;
-  var-content-bg-color: green;
+  var-my-color: red;
 }
+```
 
-.main-header {
-  background: var(header-bg-color);
-}
+Variables are applied using the `var()` function, taking the name of a variable
+as the first argument:
 
-.main-content {
-  background: var(content-bg-color) !important;
-}
-
+```css
 :root {
-  var-header-bg-color: red;
+  var-my-color: red;
 }
 
-.sub-header {
-  background: var(header-bg-color);
-  /* simple fallback */
-  color: var(missing, white);
+div {
+  color: var(my-color);
+}
+```
+
+Fallback values are supported and are applied if a variable has not been
+declared:
+
+```css
+:root {
+  var-my-color: red;
 }
 
-.sub-content {
-  /* complex fallback */
-  background: var(missing, linear-gradient(to top, var(content-bg-color), white)) !important;
+div {
+  color: var(my-other-color, green);
+}
+```
+
+Fallbacks can be "complex". Anything after the first comma in the `var()`
+function will act as the fallback value – `var(name, fallback)`. Nested
+variables are also supported:
+
+```css
+:root {
+  var-my-color: red;
+}
+
+div {
+  background: var(my-other-color, linear-gradient(var(my-color), rgba(255,0,0,0.5)));
+}
+```
+
+## What to expect
+
+1. Variables can _only_ be declared for, and scoped to the `:root` element. All
+   other variable declarations are left untouched. Any known variables used as
+   values are replaced.
+
+```css
+:root {
+  var-color-1: red;
+  var-color-2: green;
+}
+
+:root,
+div {
+  var-color-2: purple;
+  color: var(color-2);
+}
+
+div {
+  var-color-3: blue;
+}
+
+span {
+  var-color-4: yellow;
 }
 ```
 
 yields:
 
 ```css
-.main-header {
-  background: green;
+:root,
+div {
+  var-color-2: purple;
+  color: green;
 }
 
-.main-content {
-  background: green !important;
+div {
+  var-color-3: blue;
 }
 
-.sub-header {
-  background: red;
-  /* simple fallback */
-  color: white;
+span {
+  var-color-4: yellow;
+}
+```
+
+2. Variables are not dynamic; they are replaced with normal CSS values. The
+   value of a defined variable is determined by the last declaration of that
+   variable for `:root`.
+
+```css
+:root {
+  var-brand-color: green;
 }
 
-.sub-content {
-  /* complex fallback */
-  background: linear-gradient(to top, green, white) !important;
+.brand {
+  color: var(brand-color);
 }
+
+:root {
+  var-brand-color: red;
+}
+```
+
+yields:
+
+```css
+.brand {
+  color: red;
+}
+```
+
+3. Variables declared within `@media` or `@supports` are not currently
+   supported and will result in a compilation error
+
+```css
+@media (min-width: 320px) {
+  :root {
+    var-brand-color: red;
+  }
+}
+```
+
+yields:
+
+```bash
+Error: rework-vars: variables within `@` blocks are not supported
 ```
 
 ## License

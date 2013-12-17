@@ -1,4 +1,10 @@
+:root,
+span {
+  var-untouched: red;
+}
+
 div {
+  var-untouched: red;
   /* single variable */
   color: green;
   /* single variable with tail */

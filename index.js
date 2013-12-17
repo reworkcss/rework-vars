@@ -14,31 +14,32 @@ module.exports = function(map){
 
   return function vars(style){
     visit(style, function(declarations, node){
-      var varNameIndices = [];
-      var name;
-      var i;
-
-      // define and resolve variables
-      declarations.forEach(function(decl, i){
-        if (decl.property && /\bvar\-/.test(decl.property)) {
-          name = decl.property.replace('var-', '');
-          map[name] = decl.value;
-          varNameIndices.push(i);
+      // define variables
+      style.rules.forEach(function (rule) {
+        if (rule.type === 'rule') {
+          // only variables declared for `:root` are supported
+          if (rule.selectors.length === 1 && rule.selectors[0] === ':root') {
+            rule.declarations.forEach(function(decl, i){
+              if (decl.property && /\bvar\-/.test(decl.property)) {
+                var name = decl.property.replace('var-', '');
+                map[name] = decl.value;
+                // remove variable definition from AST
+                rule.declarations.splice(decl[i], 1);
+              }
+            });
+          }
         }
+        else {
+          throw new Error('rework-vars: variables within `@` blocks are not supported');
+        }
+      });
 
+      // resolve variables
+      declarations.forEach(function(decl, i){
         if (decl.value && /\bvar\(/.test(decl.value)) {
           decl.value = replaceValue(decl.value, map);
         }
       });
-
-      // sort the indices of variable definitions in ascending order
-      varNameIndices.sort(function(a, b){ return a - b; });
-
-      // remove `var-*` properties from the CSS
-      // reverse loop avoids affecting indices of elements yet to be removed
-      for (i = varNameIndices.length - 1; i >= 0; i -=1) {
-        declarations.splice(varNameIndices[i], 1);
-      }
     });
   };
 };
