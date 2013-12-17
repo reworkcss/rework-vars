@@ -3,9 +3,10 @@
 A [Rework](https://github.com/visionmedia/rework) plugin to add support for the
 [W3C-style CSS variables](http://www.w3.org/TR/css-variables/) syntax.
 
-**N.B.** This is _not_ a polyfill. Variables are not scoped or dynamic. Every
-variable is in the global scope. Variables are replaced once, and then function
-as normal CSS values.
+**N.B.** This is _not_ a polyfill. Variables can only be declared and scoped to
+the `:root` element. They cannot be declared within `@media` or `@supports`
+blocks. Every variable is in the global scope. Variables are replaced once, and
+then function as normal CSS values.
 
 ## Installation
 
@@ -77,7 +78,7 @@ yields:
 
 ```css
 .main-header {
-  background: green;
+  background: red;
 }
 
 .main-content {

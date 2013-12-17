@@ -41,11 +41,18 @@ describe('rework-vars', function(){
     expect(output).to.Throw(Error, 'rework-vars: missing closing ")" in the value "var(test, rgba(0,0,0,0.5)"');
   });
 
-  it('substitutes defined variables', function(){
+  it('throws an error when a variable is defined in a media query', function(){
+    var output = function () {
+      return rework(fixture('media-query')).use(vars).toString();
+    };
+    expect(output).to.Throw(Error, 'rework-vars: variables cannot be defined within `@` blocks');
+  });
+
+  it('substitutes defined variables in `:root` only', function(){
     compareFixtures('substitution-defined');
   });
 
-  it('overwrites variables in place', function(){
+  it('overwrites variables correctly', function(){
     compareFixtures('substitution-overwrite');
   });
 
