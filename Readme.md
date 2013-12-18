@@ -163,7 +163,7 @@ yields:
 ```
 
 Variables declared within `@media` or `@supports` are not currently supported
-and will result in a compilation error.
+and will also be ignored.
 
 ```css
 @media (min-width: 320px) {
@@ -175,8 +175,12 @@ and will result in a compilation error.
 
 yields:
 
-```bash
-Error: rework-vars: variables within `@` blocks are not supported
+```css
+@media (min-width: 320px) {
+  :root {
+    var-brand-color: red;
+  }
+}
 ```
 
 ## License

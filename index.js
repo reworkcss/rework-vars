@@ -29,9 +29,6 @@ module.exports = function(map){
             });
           }
         }
-        else {
-          throw new Error('rework-vars: variables within `@` blocks are not supported');
-        }
       });
 
       // resolve variables
