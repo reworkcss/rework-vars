@@ -93,9 +93,9 @@ div {
 
 ## What to expect
 
-1. Variables can _only_ be declared for, and scoped to the `:root` element. All
-   other variable declarations are left untouched. Any known variables used as
-   values are replaced.
+Variables can _only_ be declared for, and scoped to the `:root` element. All
+other variable declarations are left untouched. Any known variables used as
+values are replaced.
 
 ```css
 :root {
@@ -136,9 +136,9 @@ span {
 }
 ```
 
-2. Variables are not dynamic; they are replaced with normal CSS values. The
-   value of a defined variable is determined by the last declaration of that
-   variable for `:root`.
+Variables are not dynamic; they are replaced with normal CSS values. The value
+of a defined variable is determined by the last declaration of that variable
+for `:root`.
 
 ```css
 :root {
@@ -162,8 +162,8 @@ yields:
 }
 ```
 
-3. Variables declared within `@media` or `@supports` are not currently
-   supported and will result in a compilation error
+Variables declared within `@media` or `@supports` are not currently supported
+and will result in a compilation error.
 
 ```css
 @media (min-width: 320px) {
