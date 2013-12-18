@@ -42,7 +42,7 @@ describe('rework-vars', function(){
   });
 
   it('ignores variables defined in a media query', function(){
-    compareFixtures('substitution-defined');
+    compareFixtures('media-query');
   });
 
   it('substitutes defined variables in `:root` only', function(){

@@ -16,23 +16,31 @@ module.exports = function(map){
     visit(style, function(declarations, node){
       // define variables
       style.rules.forEach(function (rule) {
+        var i;
+        var name;
+        var varNameIndices = [];
+
         if (rule.type === 'rule') {
           // only variables declared for `:root` are supported
           if (rule.selectors.length === 1 && rule.selectors[0] === ':root') {
-            rule.declarations.forEach(function(decl, i){
+            rule.declarations.forEach(function(decl, idx){
               if (decl.property && /\bvar\-/.test(decl.property)) {
-                var name = decl.property.replace('var-', '');
+                name = decl.property.replace('var-', '');
                 map[name] = decl.value;
-                // remove variable definition from AST
-                rule.declarations.splice(decl[i], 1);
+                varNameIndices.push(idx);
               }
             });
+
+            // remove `var-*` properties from the rule
+            for (i = varNameIndices.length - 1; i >= 0; i -= 1) {
+              rule.declarations.splice(varNameIndices[i], 1);
+            }
           }
         }
       });
 
       // resolve variables
-      declarations.forEach(function(decl, i){
+      declarations.forEach(function(decl, idx){
         if (decl.value && /\bvar\(/.test(decl.value)) {
           decl.value = replaceValue(decl.value, map);
         }

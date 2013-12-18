@@ -5,6 +5,7 @@
 :root {
   var-test-one: green;
   var-test-two: blue;
+  var-test-three: yellow;
 }
 
 :root,
