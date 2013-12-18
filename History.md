@@ -1,3 +1,8 @@
+2.0.1 / 2013-12-18
+==================
+
+ * fix the plugin throwing errors when processing anything that isn't a basic rule
+
 2.0.0 / 2013-12-18
 ==================
 
