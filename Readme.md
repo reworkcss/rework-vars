@@ -1,6 +1,6 @@
-# rework-vars [![Build Status](https://travis-ci.org/visionmedia/rework-vars.png)](https://travis-ci.org/visionmedia/rework-vars)
+# rework-vars [![Build Status](https://travis-ci.org/reworkcss/rework-vars.png)](https://travis-ci.org/reworkcss/rework-vars)
 
-A [Rework](https://github.com/visionmedia/rework) plugin to add support for the
+A [Rework](https://github.com/reworkcss/rework) plugin to add support for the
 [W3C-style CSS variables](http://www.w3.org/TR/css-variables/) syntax.
 
 **N.B.** This is _not_ a polyfill. This plugin aims to provide a future-proof
