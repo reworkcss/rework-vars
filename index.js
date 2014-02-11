@@ -9,10 +9,11 @@ var visit = require('rework-visit');
  * Module export.
  */
 
-module.exports = function(map){
-  map = map || {};
+module.exports = function(jsmap) {
 
   return function vars(style){
+    var map = jsmap || {};
+
     // define variables
     style.rules.forEach(function (rule) {
       var i;
