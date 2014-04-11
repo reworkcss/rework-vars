@@ -22,30 +22,31 @@ module.exports = function(jsmap) {
 
     // define variables
     style.rules.forEach(function (rule) {
-      var i;
-      var name;
       var varNameIndices = [];
 
-      if (rule.type === 'rule') {
-        // only variables declared for `:root` are supported
-        if (rule.selectors.length === 1 && rule.selectors[0] === ':root') {
-          rule.declarations.forEach(function(decl, idx){
-            if (decl.property && decl.property.indexOf(VAR_SET_IDENTIFIER) === 0) {
-              map[decl.property] = decl.value;
-              varNameIndices.push(idx);
-            }
-          });
+      if (rule.type !== 'rule') return;
 
-          // remove `--*` properties from the rule
-          for (i = varNameIndices.length - 1; i >= 0; i -= 1) {
-            rule.declarations.splice(varNameIndices[i], 1);
+      // only variables declared for `:root` are supported
+      if (rule.selectors.length === 1 && rule.selectors[0] === ':root') {
+        rule.declarations.forEach(function(decl, idx){
+          var prop = decl.property;
+          var val = decl.value;
+
+          if (prop && prop.indexOf(VAR_SET_IDENTIFIER) === 0) {
+            map[prop] = val;
+            varNameIndices.push(idx);
           }
+        });
+
+        // remove `--*` properties from the rule
+        for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
+          rule.declarations.splice(varNameIndices[i], 1);
         }
       }
     });
 
+    // resolve variables
     visit(style, function(declarations, node){
-      // resolve variables
       declarations.forEach(function(decl, idx){
         if (decl.value && decl.value.indexOf(VAR_GET_IDENTIFIER) !== -1) {
           decl.value = replaceValue(decl.value, map);
