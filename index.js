@@ -1,9 +1,15 @@
-
 /**
  * Module dependencies.
  */
 
 var visit = require('rework-visit');
+
+/**
+ * Constants.
+ */
+
+var VAR_SET_IDENTIFIER = '--';
+var VAR_GET_IDENTIFIER = 'var(';
 
 /**
  * Module export.
@@ -24,14 +30,13 @@ module.exports = function(jsmap) {
         // only variables declared for `:root` are supported
         if (rule.selectors.length === 1 && rule.selectors[0] === ':root') {
           rule.declarations.forEach(function(decl, idx){
-            if (decl.property && /\bvar\-/.test(decl.property)) {
-              name = decl.property.replace('var-', '');
-              map[name] = decl.value;
+            if (decl.property && decl.property.indexOf(VAR_SET_IDENTIFIER) === 0) {
+              map[decl.property] = decl.value;
               varNameIndices.push(idx);
             }
           });
 
-          // remove `var-*` properties from the rule
+          // remove `--*` properties from the rule
           for (i = varNameIndices.length - 1; i >= 0; i -= 1) {
             rule.declarations.splice(varNameIndices[i], 1);
           }
@@ -42,7 +47,7 @@ module.exports = function(jsmap) {
     visit(style, function(declarations, node){
       // resolve variables
       declarations.forEach(function(decl, idx){
-        if (decl.value && /\bvar\(/.test(decl.value)) {
+        if (decl.value && decl.value.indexOf(VAR_GET_IDENTIFIER) !== -1) {
           decl.value = replaceValue(decl.value, map);
         }
       });
@@ -106,7 +111,7 @@ function replaceValue(value, map){
   value = value.split(cssVariable).join(cssReplacement);
 
   // recursively resolve any remaining variables
-  if (/\bvar\(/.test(value)) {
+  if (value.indexOf(VAR_GET_IDENTIFIER) !== -1) {
     value = replaceValue(value, map);
   }
 

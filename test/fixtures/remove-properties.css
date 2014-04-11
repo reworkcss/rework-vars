@@ -1,6 +1,6 @@
 :root {
-  var-test-one: test;
-  var-test-two: test;
+  --test-one: test;
+  --test-two: test;
 }
 
 div {
@@ -8,6 +8,6 @@ div {
 }
 
 :root {
-  var-test-three: test;
-  var-test-four: test;
+  --test-three: test;
+  --test-four: test;
 }

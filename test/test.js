@@ -31,14 +31,14 @@ describe('rework-vars', function(){
     var output = function () {
       return rework(fixture('substitution-undefined')).use(vars).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: variable "test" is undefined');
+    expect(output).to.Throw(Error, 'rework-vars: variable "--test" is undefined');
   });
 
   it('throws an error when a variable function is malformed', function(){
     var output = function () {
       return rework(fixture('substitution-malformed')).use(vars).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: missing closing ")" in the value "var(test, rgba(0,0,0,0.5)"');
+    expect(output).to.Throw(Error, 'rework-vars: missing closing ")" in the value "var(--test, rgba(0,0,0,0.5)"');
   });
 
   it('ignores variables defined in a media query', function(){

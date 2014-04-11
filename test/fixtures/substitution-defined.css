@@ -3,24 +3,24 @@
  */
 
 :root {
-  var-test-one: green;
-  var-test-two: blue;
-  var-test-three: yellow;
+  --test-one: green;
+  --test-two: blue;
+  --test-three: yellow;
 }
 
 :root,
 span {
-  var-untouched: red;
+  --untouched: red;
 }
 
 div {
-  var-untouched: red;
+  --untouched: red;
   /* single variable */
-  color: var(test-one);
+  color: var(--test-one);
   /* single variable with tail */
-  color: var(test-one) !important;
+  color: var(--test-one) !important;
   /* multiple variables */
-  color: var(test-one), var(test-two);
+  color: var(--test-one), var(--test-two);
   /* multiple variables within a function */
-  background: linear-gradient(to top, var(test-one), var(test-two));
+  background: linear-gradient(to top, var(--test-one), var(--test-two));
 }

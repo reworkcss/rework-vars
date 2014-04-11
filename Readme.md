@@ -43,11 +43,11 @@ var out = rework(css).use(vars(map)).toString();
 ## Supported features
 
 Variables can be declared as custom CSS properties on the `:root` element,
-prefixed with `var-`:
+prefixed with `--`:
 
 ```css
 :root {
-  var-my-color: red;
+  --my-color: red;
 }
 ```
 
@@ -56,11 +56,11 @@ as the first argument:
 
 ```css
 :root {
-  var-my-color: red;
+  --my-color: red;
 }
 
 div {
-  color: var(my-color);
+  color: var(--my-color);
 }
 ```
 
@@ -69,11 +69,11 @@ declared:
 
 ```css
 :root {
-  var-my-color: red;
+  --my-color: red;
 }
 
 div {
-  color: var(my-other-color, green);
+  color: var(--other-color, green);
 }
 ```
 
@@ -83,11 +83,11 @@ variables are also supported:
 
 ```css
 :root {
-  var-my-color: red;
+  --my-color: red;
 }
 
 div {
-  background: var(my-other-color, linear-gradient(var(my-color), rgba(255,0,0,0.5)));
+  background: var(--my-other-color, linear-gradient(var(--my-color), rgba(255,0,0,0.5)));
 }
 ```
 
@@ -99,22 +99,22 @@ values are replaced.
 
 ```css
 :root {
-  var-color-1: red;
-  var-color-2: green;
+  --color-one: red;
+  --color-two: green;
 }
 
 :root,
 div {
-  var-color-2: purple;
-  color: var(color-2);
+  --color-two: purple;
+  color: var(--color-two);
 }
 
 div {
-  var-color-3: blue;
+  --color-three: blue;
 }
 
 span {
-  var-color-4: yellow;
+  --color-four: yellow;
 }
 ```
 
@@ -123,16 +123,16 @@ yields:
 ```css
 :root,
 div {
-  var-color-2: purple;
+  --color-two: purple;
   color: green;
 }
 
 div {
-  var-color-3: blue;
+  --color-three: blue;
 }
 
 span {
-  var-color-4: yellow;
+  --color-four: yellow;
 }
 ```
 
@@ -142,15 +142,15 @@ for `:root`.
 
 ```css
 :root {
-  var-brand-color: green;
+  --brand-color: green;
 }
 
 .brand {
-  color: var(brand-color);
+  color: var(--brand-color);
 }
 
 :root {
-  var-brand-color: red;
+  --brand-color: red;
 }
 ```
 
@@ -168,7 +168,7 @@ and will also be ignored.
 ```css
 @media (min-width: 320px) {
   :root {
-    var-brand-color: red;
+    --brand-color: red;
   }
 }
 ```
@@ -178,7 +178,7 @@ yields:
 ```css
 @media (min-width: 320px) {
   :root {
-    var-brand-color: red;
+    --brand-color: red;
   }
 }
 ```

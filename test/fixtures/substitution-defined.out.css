@@ -6,11 +6,11 @@
 
 :root,
 span {
-  var-untouched: red;
+  --untouched: red;
 }
 
 div {
-  var-untouched: red;
+  --untouched: red;
   /* single variable */
   color: green;
   /* single variable with tail */

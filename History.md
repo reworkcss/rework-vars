@@ -1,3 +1,5 @@
+* update syntax from `var-*` to `--*` to match spec
+
 2.0.3 / 2014-02-11
 ==================
 
@@ -6,7 +8,7 @@
 2.0.2 / 2013-12-18
 ==================
 
- * fix var-* property stripping from output
+ * fix `var-*` property stripping from output
 
 2.0.1 / 2013-12-18
 ==================
@@ -25,7 +27,7 @@
 
  * add support for fallback values
  * add support for overwriting variable values
- * add stripping of old var-* properties from output
+ * add stripping of old `var-*` properties from output
 
 1.0.1 / 2013-07-23
 ==================
