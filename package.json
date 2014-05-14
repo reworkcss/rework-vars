@@ -19,9 +19,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/visionmedia/rework-vars.git"
+    "url": "https://github.com/reworkcss/rework-vars.git"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha --no-colors"
+    "test": "mocha --no-colors"
   }
 }
