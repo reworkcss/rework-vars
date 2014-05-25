@@ -29,6 +29,10 @@ var css = fs.readFileSync('build/build.css', 'utf8').toString();
 var out = rework(css).use(vars()).toString();
 ```
 
+### Options
+
+#### `map`
+
 Optionally, you may pass an object of variables - `map` - to the JavaScript
 function.
 
@@ -37,8 +41,17 @@ var map = {
   'app-bg-color': 'white'
 }
 
-var out = rework(css).use(vars(map)).toString();
+var out = rework(css).use(vars({map: map})).toString();
 ```
+
+#### `replace` (default: `true`)
+
+You can specify set the `replace` option to `false`. This will keep original syntax in order to act more like a fallback (& not just a replacement).
+
+```js
+var out = rework(css).use(vars({replace: false})).toString();
+```
+
 
 ## Supported features
 
