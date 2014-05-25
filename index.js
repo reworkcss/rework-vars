@@ -16,10 +16,12 @@ var VAR_FUNC_IDENTIFIER = 'var';
  * Module export.
  */
 
-module.exports = function(jsmap) {
+module.exports = function(options) {
 
   return function vars(style){
-    var map = jsmap || {};
+    options = options || {};
+    var map = options.map || {};
+    var preserve = (options.preserve === true ? true : false);
 
     // define variables
     style.rules.forEach(function (rule) {
@@ -39,19 +41,44 @@ module.exports = function(jsmap) {
         }
       });
 
-      // remove `--*` properties from the rule
-      for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
-        rule.declarations.splice(varNameIndices[i], 1);
+      // optionally remove `--*` properties from the rule
+      if (!preserve) {
+        for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
+          rule.declarations.splice(varNameIndices[i], 1);
+        }
       }
     });
 
     // resolve variables
-    visit(style, function(declarations, node){
-      declarations.forEach(function(decl, idx){
-        if (decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1) {
-          decl.value = replaceValue(decl.value, map);
+    visit(style, function(declarations, node) {
+      var decl;
+      var resolvedValue;
+      var val;
+
+      for (var i = 0; i < declarations.length; i++) {
+        decl = declarations[i];
+        val = decl.value;
+
+        // skip comments
+        if (decl.type !== 'declaration') continue;
+        // skip values that don't contain variable functions
+        if (!val || val.indexOf(VAR_FUNC_IDENTIFIER + '(') === -1) continue;
+
+        resolvedValue = resolveValue(val, map);
+
+        if (!preserve) {
+          decl.value = resolvedValue;
         }
-      });
+        else {
+          declarations.splice(i, 0, {
+            type: decl.type,
+            property: decl.property,
+            value: resolvedValue
+          });
+          // skip ahead of preserved declaration
+          i++;
+        }
+      }
     });
   };
 };
@@ -70,7 +97,7 @@ module.exports = function(jsmap) {
  * @return {String} A property value with all CSS variables substituted.
  */
 
-function replaceValue(value, map){
+function resolveValue(value, map){
   // matches `name[, fallback]`, captures 'name' and 'fallback'
   var RE_VAR = /([\w-]+)(?:\s*,\s*)?(.*)?/;
   var balancedParens = balanced('(', ')', value);
@@ -93,7 +120,7 @@ function replaceValue(value, map){
 
   // recursively resolve any remaining variables in the value
   if (value.indexOf(VAR_FUNC_IDENTIFIER) !== -1) {
-    value = replaceValue(value, map);
+    value = resolveValue(value, map);
   }
 
   return value;

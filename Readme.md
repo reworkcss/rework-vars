@@ -26,8 +26,13 @@ var vars = require('rework-vars');
 var css = fs.readFileSync('build/build.css', 'utf8').toString();
 
 // process css using rework-vars
-var out = rework(css).use(vars()).toString();
+var options = {};
+var out = rework(css).use(vars(options)).toString();
 ```
+
+### Options
+
+#### `map`
 
 Optionally, you may pass an object of variables - `map` - to the JavaScript
 function.
@@ -37,7 +42,16 @@ var map = {
   'app-bg-color': 'white'
 }
 
-var out = rework(css).use(vars(map)).toString();
+var out = rework(css).use(vars({map: map})).toString();
+```
+
+#### `preserve` (default: `false`)
+
+Setting `preserve` to `true` will preserve the variable definitions and
+references in the output, so that they can be used by supporting browsers.
+
+```js
+var out = rework(css).use(vars({preserve: true})).toString();
 ```
 
 ## Supported features
