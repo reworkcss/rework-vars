@@ -58,13 +58,13 @@ module.exports = function(options) {
 
         if (decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1) {
           if (!options.preserve) {
-            decl.value = resolveValue(decl.value, options);
+            decl.value = resolveValue(decl.value, options.map);
           }
           else {
             declarations.splice(i++, 0, {
               type: decl.type,
               property: decl.property,
-              value: resolveValue(decl.value, options)
+              value: resolveValue(decl.value, options.map)
             });
           }
         }
@@ -87,7 +87,7 @@ module.exports = function(options) {
  * @return {String} A property value with all CSS variables substituted.
  */
 
-function resolveValue(value, options){
+function resolveValue(value, map){
   // matches `name[, fallback]`, captures 'name' and 'fallback'
   var RE_VAR = /([\w-]+)(?:\s*,\s*)?(.*)?/;
   var balancedParens = balanced('(', ')', value);
@@ -99,7 +99,7 @@ function resolveValue(value, options){
   var varFunc = VAR_FUNC_IDENTIFIER + '(' + varRef + ')';
 
   var varResult = varRef.replace(RE_VAR, function(_, name, fallback){
-    var replacement = options.map[name];
+    var replacement = map[name];
     if (!replacement && !fallback) throw new Error('rework-vars: variable "' + name + '" is undefined');
     if (!replacement && fallback) return fallback;
     return replacement;
@@ -110,7 +110,7 @@ function resolveValue(value, options){
 
   // recursively resolve any remaining variables in the value
   if (value.indexOf(VAR_FUNC_IDENTIFIER) !== -1) {
-    value = resolveValue(value, options);
+    value = resolveValue(value, map);
   }
 
   return value;
