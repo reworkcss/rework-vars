@@ -61,7 +61,7 @@ describe('rework-vars', function(){
     compareFixtures('case-sensitive');
   });
 
-  it('allow to keep definition & var() usage', function(){
-    compareFixtures('keep-original-syntax', {replace: false});
+  it('preserves variables when `preserve` is `true`', function(){
+    compareFixtures('preserve-variables', {preserve: true});
   });
 });

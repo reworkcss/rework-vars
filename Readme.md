@@ -44,14 +44,13 @@ var map = {
 var out = rework(css).use(vars({map: map})).toString();
 ```
 
-#### `replace` (default: `true`)
+#### `preserve` (default: `false`)
 
-You can specify set the `replace` option to `false`. This will keep original syntax in order to act more like a fallback (& not just a replacement).
+Setting `preserve` to `true` will preserve the variable definitions and references in the output, so that they can be used by supporting browsers.
 
 ```js
-var out = rework(css).use(vars({replace: false})).toString();
+var out = rework(css).use(vars({preserve: true})).toString();
 ```
-
 
 ## Supported features
 

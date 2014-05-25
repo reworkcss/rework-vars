@@ -21,7 +21,7 @@ module.exports = function(options) {
   return function vars(style){
     options = options || {};
     options.map = options.map || {};
-    options.replace = options.replace !== undefined ? options.replace : true;
+    options.preserve = options.preserve !== undefined ? options.preserve : false;
 
     // define variables
     style.rules.forEach(function (rule) {
@@ -41,7 +41,7 @@ module.exports = function(options) {
         }
       });
 
-      if (options.replace) {
+      if (!options.preserve) {
         // remove `--*` properties from the rule
         for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
           rule.declarations.splice(varNameIndices[i], 1);
@@ -57,7 +57,7 @@ module.exports = function(options) {
         if (decl.type !== 'declaration') continue;
 
         if (decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1) {
-          if (options.replace) {
+          if (!options.preserve) {
             decl.value = resolveValue(decl.value, options);
           }
           else {
