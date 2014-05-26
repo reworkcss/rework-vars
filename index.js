@@ -16,9 +16,9 @@ var VAR_FUNC_IDENTIFIER = 'var';
  * Module export.
  */
 
-module.exports = function(options) {
+module.exports = function (options) {
 
-  return function vars(style){
+  return function vars(style) {
     options = options || {};
     var map = options.map || {};
     var preserve = (options.preserve === true ? true : false);
@@ -31,40 +31,40 @@ module.exports = function(options) {
       // only variables declared for `:root` are supported
       if (rule.selectors.length !== 1 || rule.selectors[0] !== ':root') return;
 
-      rule.declarations.forEach(function(decl, idx){
+      rule.declarations.forEach(function (decl, i) {
         var prop = decl.property;
-        var val = decl.value;
+        var value = decl.value;
 
         if (prop && prop.indexOf(VAR_PROP_IDENTIFIER) === 0) {
-          map[prop] = val;
-          varNameIndices.push(idx);
+          map[prop] = value;
+          varNameIndices.push(i);
         }
       });
 
       // optionally remove `--*` properties from the rule
       if (!preserve) {
-        for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
+        for (var i = varNameIndices.length - 1; i >= 0; i--) {
           rule.declarations.splice(varNameIndices[i], 1);
         }
       }
     });
 
     // resolve variables
-    visit(style, function(declarations, node) {
+    visit(style, function (declarations, node) {
       var decl;
       var resolvedValue;
-      var val;
+      var value;
 
       for (var i = 0; i < declarations.length; i++) {
         decl = declarations[i];
-        val = decl.value;
+        value = decl.value;
 
         // skip comments
         if (decl.type !== 'declaration') continue;
         // skip values that don't contain variable functions
-        if (!val || val.indexOf(VAR_FUNC_IDENTIFIER + '(') === -1) continue;
+        if (!value || value.indexOf(VAR_FUNC_IDENTIFIER + '(') === -1) continue;
 
-        resolvedValue = resolveValue(val, map);
+        resolvedValue = resolveValue(value, map);
 
         if (!preserve) {
           decl.value = resolvedValue;
@@ -97,7 +97,7 @@ module.exports = function(options) {
  * @return {String} A property value with all CSS variables substituted.
  */
 
-function resolveValue(value, map){
+function resolveValue(value, map) {
   // matches `name[, fallback]`, captures 'name' and 'fallback'
   var RE_VAR = /([\w-]+)(?:\s*,\s*)?(.*)?/;
   var balancedParens = balanced('(', ')', value);
@@ -108,7 +108,7 @@ function resolveValue(value, map){
 
   var varFunc = VAR_FUNC_IDENTIFIER + '(' + varRef + ')';
 
-  var varResult = varRef.replace(RE_VAR, function(_, name, fallback){
+  var varResult = varRef.replace(RE_VAR, function (_, name, fallback) {
     var replacement = map[name];
     if (!replacement && !fallback) throw new Error('rework-vars: variable "' + name + '" is undefined');
     if (!replacement && fallback) return fallback;
