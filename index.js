@@ -49,18 +49,23 @@ module.exports = function(options) {
       }
     });
 
-    // resolve variables
-    visit(style, function(declarations, node){
-      for (var i = 0; i < declarations.length; i++) {
-        var decl = declarations[i]
-        // Could be comments
-        if (decl.type !== 'declaration') continue;
+    function valueUseVar(decl) {
+      return (decl.type === 'declaration' && decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1)
+    }
 
-        if (decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1) {
-          if (!options.preserve) {
+    // resolve variables
+    visit(style, !options.preserve ?
+      function(declarations, node){
+        declarations.forEach(function(decl, i) {
+          if (valueUseVar(decl)) {
             decl.value = resolveValue(decl.value, options.map);
           }
-          else {
+        });
+      } :
+      function(declarations, node){
+        for (var i = 0; i < declarations.length; i++) {
+          var decl = declarations[i]
+          if (valueUseVar(decl)) {
             declarations.splice(i++, 0, {
               type: decl.type,
               property: decl.property,
@@ -69,7 +74,7 @@ module.exports = function(options) {
           }
         }
       }
-    });
+    );
   };
 };
 
