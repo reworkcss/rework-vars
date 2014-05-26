@@ -16,10 +16,12 @@ var VAR_FUNC_IDENTIFIER = 'var';
  * Module export.
  */
 
-module.exports = function(jsmap) {
+module.exports = function(options) {
 
   return function vars(style){
-    var map = jsmap || {};
+    options = options || {};
+    options.map = options.map || {};
+    options.preserve = options.preserve !== undefined ? options.preserve : false;
 
     // define variables
     style.rules.forEach(function (rule) {
@@ -34,25 +36,45 @@ module.exports = function(jsmap) {
         var val = decl.value;
 
         if (prop && prop.indexOf(VAR_PROP_IDENTIFIER) === 0) {
-          map[prop] = val;
+          options.map[prop] = val;
           varNameIndices.push(idx);
         }
       });
 
-      // remove `--*` properties from the rule
-      for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
-        rule.declarations.splice(varNameIndices[i], 1);
+      if (!options.preserve) {
+        // remove `--*` properties from the rule
+        for (var i = varNameIndices.length - 1; i >= 0; i -= 1) {
+          rule.declarations.splice(varNameIndices[i], 1);
+        }
       }
     });
 
+    function valueUseVar(decl) {
+      return (decl.type === 'declaration' && decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1)
+    }
+
     // resolve variables
-    visit(style, function(declarations, node){
-      declarations.forEach(function(decl, idx){
-        if (decl.value && decl.value.indexOf(VAR_FUNC_IDENTIFIER + '(') !== -1) {
-          decl.value = replaceValue(decl.value, map);
+    visit(style, !options.preserve ?
+      function(declarations, node){
+        declarations.forEach(function(decl, i) {
+          if (valueUseVar(decl)) {
+            decl.value = resolveValue(decl.value, options.map);
+          }
+        });
+      } :
+      function(declarations, node){
+        for (var i = 0; i < declarations.length; i++) {
+          var decl = declarations[i]
+          if (valueUseVar(decl)) {
+            declarations.splice(i++, 0, {
+              type: decl.type,
+              property: decl.property,
+              value: resolveValue(decl.value, options.map)
+            });
+          }
         }
-      });
-    });
+      }
+    );
   };
 };
 
@@ -66,11 +88,11 @@ module.exports = function(jsmap) {
  * var(name[, fallback])
  *
  * @param {String} value A property value known to contain CSS variable functions
- * @param {Object} map A map of variable names and values
+ * @param {Object} options An object containings options
  * @return {String} A property value with all CSS variables substituted.
  */
 
-function replaceValue(value, map){
+function resolveValue(value, map){
   // matches `name[, fallback]`, captures 'name' and 'fallback'
   var RE_VAR = /([\w-]+)(?:\s*,\s*)?(.*)?/;
   var balancedParens = balanced('(', ')', value);
@@ -93,7 +115,7 @@ function replaceValue(value, map){
 
   // recursively resolve any remaining variables in the value
   if (value.indexOf(VAR_FUNC_IDENTIFIER) !== -1) {
-    value = replaceValue(value, map);
+    value = resolveValue(value, map);
   }
 
   return value;
