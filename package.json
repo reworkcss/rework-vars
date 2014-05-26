@@ -11,6 +11,9 @@
     "rework": "~0.18.3",
     "chai": "~1.8.1"
   },
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha --no-colors",
     "watch": "mocha --slow 30 --reporter spec --watch"
