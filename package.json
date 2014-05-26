@@ -2,13 +2,6 @@
   "name": "rework-vars",
   "version": "3.0.0",
   "description": "CSS spec style variables for Rework",
-  "keywords": [
-    "css",
-    "rework",
-    "variables",
-    "vars"
-  ],
-  "license": "MIT",
   "dependencies": {
     "rework-visit": "1.0.0",
     "balanced-match": "~0.1.0"
@@ -18,11 +11,19 @@
     "rework": "~0.18.3",
     "chai": "~1.8.1"
   },
+  "scripts": {
+    "test": "mocha --no-colors",
+    "watch": "mocha --slow 30 --reporter spec --watch"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/reworkcss/rework-vars.git"
   },
-  "scripts": {
-    "test": "mocha --no-colors"
-  }
+  "license": "MIT",
+  "keywords": [
+    "css",
+    "rework",
+    "variables",
+    "vars"
+  ]
 }
