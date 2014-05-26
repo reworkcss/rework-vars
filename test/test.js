@@ -61,7 +61,7 @@ describe('rework-vars', function(){
     compareFixtures('case-sensitive');
   });
 
-  it('preserves variables when `preserve` is `true`', function(){
+  it('should preserves variables when `preserve` is `true`', function(){
     compareFixtures('preserve-variables', {preserve: true});
   });
 });
