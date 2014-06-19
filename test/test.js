@@ -1,6 +1,6 @@
+var assert = require('assert');
 var fs = require('fs');
 var rework = require('rework');
-var expect = require('chai').expect;
 var vars = require('..');
 
 function fixture(name) {
@@ -8,11 +8,9 @@ function fixture(name) {
 }
 
 function compareFixtures(name, options) {
-  return expect(
-    rework(fixture(name))
-    .use(vars(options))
-    .toString().trim()
-  ).to.equal(fixture(name + '.out'));
+  var actual = rework(fixture(name)).use(vars(options)).toString().trim();
+  var expected = fixture(name + '.out');
+  return assert.equal(actual, expected);
 }
 
 describe('rework-vars', function () {
@@ -24,21 +22,21 @@ describe('rework-vars', function () {
     var output = function () {
       return rework(fixture('substitution-empty')).use(vars()).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: var() must contain a non-whitespace string');
+    assert.throws(output, Error, 'rework-vars: var() must contain a non-whitespace string');
   });
 
   it('throws an error when a variable function references an undefined variable', function () {
     var output = function () {
       return rework(fixture('substitution-undefined')).use(vars()).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: variable "--test" is undefined');
+    assert.throws(output, Error, 'rework-vars: variable "--test" is undefined');
   });
 
   it('throws an error when a variable function is malformed', function () {
     var output = function () {
       return rework(fixture('substitution-malformed')).use(vars()).toString();
     };
-    expect(output).to.Throw(Error, 'rework-vars: missing closing ")" in the value "var(--test, rgba(0,0,0,0.5)"');
+    assert.throws(output, Error, 'rework-vars: missing closing ")" in the value "var(--test, rgba(0,0,0,0.5)"');
   });
 
   it('ignores variables defined in a media query', function () {

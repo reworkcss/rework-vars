@@ -8,8 +8,7 @@
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "rework": "~0.18.3",
-    "chai": "~1.8.1"
+    "rework": "~0.18.3"
   },
   "files": [
     "index.js"
