@@ -1,3 +1,4 @@
+* remove Component(1) support
 * add the option to preserve variables in the output
 
 3.0.0 / 2014-04-17
