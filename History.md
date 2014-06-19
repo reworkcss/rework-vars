@@ -1,3 +1,6 @@
+3.1.0 / 2014-06-19
+==================
+
 * remove Component(1) support
 * add the option to preserve variables in the output
 
