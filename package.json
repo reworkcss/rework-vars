@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "mocha": "~1.14.0",
-    "rework": "~0.18.3"
+    "rework": "^1.0.0"
   },
   "files": [
     "index.js"
@@ -25,6 +25,7 @@
   "keywords": [
     "css",
     "rework",
+    "rework-plugin",
     "variables",
     "vars"
   ]
