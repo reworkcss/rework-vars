@@ -1,3 +1,5 @@
+* fix resolution of variables that contain a CSS function in their fallback
+
 3.1.0 / 2014-06-19
 ==================
 

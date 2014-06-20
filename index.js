@@ -101,7 +101,8 @@ function resolveValue(value, map) {
   // matches `name[, fallback]`, captures 'name' and 'fallback'
   var RE_VAR = /([\w-]+)(?:\s*,\s*)?(.*)?/;
   var balancedParens = balanced('(', ')', value);
-  var varRef = balanced(VAR_FUNC_IDENTIFIER + '(', ')', value).body;
+  var varStartIndex = value.indexOf('var(');
+  var varRef = balanced('(', ')', value.substring(varStartIndex)).body;
 
   if (!balancedParens) throw new Error('rework-vars: missing closing ")" in the value "' + value + '"');
   if (varRef === '') throw new Error('rework-vars: var() must contain a non-whitespace string');
@@ -114,6 +115,7 @@ function resolveValue(value, map) {
     if (!replacement && fallback) return fallback;
     return replacement;
   });
+
 
   // resolve the variable
   value = value.split(varFunc).join(varResult);
