@@ -1,6 +1,6 @@
 {
   "name": "rework-vars",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "CSS spec style variables for Rework",
   "dependencies": {
     "rework-visit": "1.0.0",
