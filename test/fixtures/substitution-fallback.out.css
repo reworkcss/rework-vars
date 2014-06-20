@@ -5,6 +5,8 @@ div {
   color: green, blue;
   /* fallback is a function */
   background: linear-gradient(to top, #000, #111);
+  /* fallback contains a function */
+  background: 1px solid rgba(0, 0, 0, 0.1);
   /* fallback is a function containing a function */
   background: linear-gradient(to top, #000, rgba(0, 0, 0, 0.5));
   /* fallback contains a defined variable */
