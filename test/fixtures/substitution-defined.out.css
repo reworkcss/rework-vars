@@ -22,3 +22,20 @@ div {
   /* multiple variables within a function */
   background: linear-gradient(to top, green, blue);
 }
+
+
+
+@keyframes kf {
+  0% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  /* simulates a delay */
+  100% {
+    opacity: 1;
+  }
+}

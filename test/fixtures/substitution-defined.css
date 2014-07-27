@@ -26,3 +26,13 @@ div {
   /* multiple variables within a function */
   background: linear-gradient(to top, var(--test-one), var(--test-two));
 }
+
+:root {
+  --op-start: 0;
+  --op-end: 1;
+}
+@keyframes kf {
+    0%   { opacity: var(--op-start) }
+    25%  { opacity: var(--op-start) }  /* simulates a delay */
+    100% { opacity: var(--op-end) }
+}
