@@ -63,6 +63,10 @@ describe('rework-vars', function () {
     compareFixtures('js-variables', { map: { '--color': 'red' } });
   });
 
+  it('substitutes defined variables in `:local` when `local` is `true`', function () {
+    compareFixtures('substitution-local', { local: true });
+  });
+
   it('preserves variables when `preserve` is `true`', function () {
     compareFixtures('preserve-variables', { preserve: true });
   });

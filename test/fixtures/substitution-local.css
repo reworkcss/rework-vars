@@ -1,0 +1,10 @@
+:local {
+  --test-one: green;
+  --test-two: blue;
+  --test-three: yellow;
+}
+
+div {
+  color: var(--test-one);
+  color: var(--test-two), var(--test-three);
+}
