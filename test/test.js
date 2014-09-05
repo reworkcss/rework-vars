@@ -59,7 +59,11 @@ describe('rework-vars', function () {
     compareFixtures('case-sensitive');
   });
 
+  it('accepts variable definitions from JavaScript', function () {
+    compareFixtures('js-variables', { map: { '--color': 'red' } });
+  });
+
   it('preserves variables when `preserve` is `true`', function () {
-    compareFixtures('preserve-variables', {preserve: true});
+    compareFixtures('preserve-variables', { preserve: true });
   });
 });
