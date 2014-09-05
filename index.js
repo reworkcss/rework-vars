@@ -20,6 +20,7 @@ module.exports = function (options) {
 
   return function vars(style) {
     options = options || {};
+
     var map = options.map || {};
     var preserve = (options.preserve === true ? true : false);
 
@@ -60,16 +61,20 @@ module.exports = function (options) {
         value = decl.value;
 
         // skip comments
-        if (decl.type !== 'declaration') continue;
+        if (decl.type !== 'declaration') {
+          continue;
+        }
+
         // skip values that don't contain variable functions
-        if (!value || value.indexOf(VAR_FUNC_IDENTIFIER + '(') === -1) continue;
+        if (!value || value.indexOf(VAR_FUNC_IDENTIFIER + '(') === -1) {
+          continue;
+        }
 
         resolvedValue = resolveValue(value, map);
 
         if (!preserve) {
           decl.value = resolvedValue;
-        }
-        else {
+        } else {
           declarations.splice(i, 0, {
             type: decl.type,
             property: decl.property,
@@ -104,18 +109,31 @@ function resolveValue(value, map) {
   var varStartIndex = value.indexOf('var(');
   var varRef = balanced('(', ')', value.substring(varStartIndex)).body;
 
-  if (!balancedParens) throw new Error('rework-vars: missing closing ")" in the value "' + value + '"');
-  if (varRef === '') throw new Error('rework-vars: var() must contain a non-whitespace string');
+  if (!balancedParens) {
+    throw new Error(
+      'rework-vars: missing closing ")" in the value "' + value + '"'
+    );
+  }
+
+  if (varRef === '') {
+    throw new Error('rework-vars: var() must contain a non-whitespace string');
+  }
 
   var varFunc = VAR_FUNC_IDENTIFIER + '(' + varRef + ')';
 
   var varResult = varRef.replace(RE_VAR, function (_, name, fallback) {
     var replacement = map[name];
-    if (!replacement && !fallback) throw new Error('rework-vars: variable "' + name + '" is undefined');
-    if (!replacement && fallback) return fallback;
+
+    if (!replacement && !fallback) {
+      throw new Error('rework-vars: variable "' + name + '" is undefined');
+    }
+
+    if (!replacement && fallback) {
+      return fallback;
+    }
+
     return replacement;
   });
-
 
   // resolve the variable
   value = value.split(varFunc).join(varResult);
