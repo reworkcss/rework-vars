@@ -22,25 +22,29 @@ module.exports = function (options) {
     options = options || {};
 
     var map = options.map || {};
+    var local = (options.local === true ? true : false);
     var preserve = (options.preserve === true ? true : false);
 
     // define variables
     style.rules.forEach(function (rule) {
       var varNameIndices = [];
 
-      if (rule.type !== 'rule') return;
-      // only variables declared for `:root` are supported
-      if (rule.selectors.length !== 1 || rule.selectors[0] !== ':root') return;
+      if (rule.type !== 'rule') { return; }
+      if (rule.selectors.length !== 1) { return; }
+      // only variables declared for `:root` or `:local` are supported
+      if (rule.selectors[0] === ':root' || (local && rule.selectors[0] === ':local')) {
+        rule.declarations.forEach(function (decl, i) {
+          var prop = decl.property;
+          var value = decl.value;
 
-      rule.declarations.forEach(function (decl, i) {
-        var prop = decl.property;
-        var value = decl.value;
-
-        if (prop && prop.indexOf(VAR_PROP_IDENTIFIER) === 0) {
-          map[prop] = value;
-          varNameIndices.push(i);
-        }
-      });
+          if (prop && prop.indexOf(VAR_PROP_IDENTIFIER) === 0) {
+            map[prop] = value;
+            varNameIndices.push(i);
+          }
+        });
+      } else {
+        return;
+      }
 
       // optionally remove `--*` properties from the rule
       if (!preserve) {
