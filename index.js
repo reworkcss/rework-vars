@@ -56,6 +56,10 @@ module.exports = function (options) {
       var resolvedValue;
       var value;
 
+      if (!declarations) {
+        return
+      }
+
       for (var i = 0; i < declarations.length; i++) {
         decl = declarations[i];
         value = decl.value;
